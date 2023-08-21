@@ -7,7 +7,11 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import axios from 'axios';
 
 const fetchUserById = async userId => {
@@ -23,6 +27,7 @@ const fetchUserById = async userId => {
 
 const UserDetail = ({route, navigation}) => {
   const {id: userId} = route.params;
+  const queryClient = useQueryClient();
   const {
     data: user,
     isError: isUserError,
@@ -31,6 +36,12 @@ const UserDetail = ({route, navigation}) => {
   } = useQuery({
     queryKey: ['getUser', userId],
     queryFn: () => fetchUserById(userId),
+    initialData: () => {
+      return queryClient.getQueriesData(['users'])?.find(u => u.id === userId);
+    },
+    initialDataUpdatedAt: () => {
+      queryClient.getQueryState(['users'])?.dataUpdatedAt;
+    },
   });
 
   if (isUserLoading) {

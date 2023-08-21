@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {useQuery} from '@tanstack/react-query';
 import axios from 'axios';
@@ -53,7 +53,6 @@ const PostDetail = ({route, navigation}) => {
 
   //lay ten tac gia bai viet
   const userId = post?.userId;
-  console.log(userId);
   const {data: user} = useQuery({
     queryKey: ['getUser', userId],
     queryFn: () => fetchUserById(userId),
@@ -79,12 +78,31 @@ const PostDetail = ({route, navigation}) => {
       <Text>Author: {user?.name}</Text>
       <Text style={{color: 'black', fontSize: 20}}>{post?.title}</Text>
       <Text>{post?.body}</Text>
-      <Text style={{marginTop: 10}}>Comments:</Text>
+      <View
+        style={{
+          borderWidth: 1,
+          flexDirection: 'row',
+          padding: 10,
+          marginVertical: 10,
+        }}>
+        <TouchableOpacity
+          style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text>Like</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text>Share</Text>
+        </TouchableOpacity>
+      </View>
       <View>
         {comments?.map(item => {
           return (
-            <View style={{marginVertical: 5}}>
-              <Text>Email: {item.email}</Text>
+            <View key={item.id} style={{marginVertical: 5}}>
+              <Text style={{color: 'black'}}>{item.email}</Text>
               <Text>{item.name}</Text>
             </View>
           );
