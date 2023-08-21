@@ -12,11 +12,23 @@ import NewPost from './src/screen/NewPost';
 import UserDetail from './src/screen/UserDetail';
 import PostDetail from './src/screen/PostDetail';
 
-// if (window.server) {
-//   window.server.shutdown();
-// }
+// staleTime (default 0 ms): Thời gian data được cho là đã cũ. Khi get data xong thì sau một thời gian bạn quy định thì data nó sẽ tự cũ
+// cacheTime (default 5*60*1000 ms tức 5 phút): Thời gian data sẽ bị xóa ra khỏi bộ nhớ đệm. Có thể data đã "cũ" nhưng nó chưa bị xóa ra khỏi bộ nhớ đệm vì bạn set stateTime < cacheTime. Thường thì người ta sẽ set stateTime < cacheTime
+// inactive: là khi data đó không còn component nào subcribe cả
 
-// window.server = setUpServer();
+// isLoading or status === 'loading' - Query chưa có data
+// isError or status === 'error' - Query xảy ra lỗi
+// isSuccess or status === 'success' - Query thành công và data đã có sẵn
+
+// error - Nếu isError === true thì error sẽ xuất hiện ở đây
+// data - Nếu isSuccess === true thì data sẽ xuất hiện ở đây
+
+// isFetching or fetchStatus === 'fetching' - Đang fetching API.
+// isPaused or fetchStatus === 'paused' - Query muốn fetch API nhưng bị tạm dừng vì một lý do nào đó.
+// fetchStatus === 'idle' - Query không làm gì cả
+
+// status cho thông tin data có hay không
+// fetchStatus cho thông tin về queryFn có đang chạy hay không
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const queryClient = new QueryClient({

@@ -22,6 +22,7 @@ const fetchCommentsByPostId = async postId => {
     );
     return response.data;
   } catch (error) {
+    // cần xử lý error để có thể trả dữ liệu về error và isError
     return Promise.reject(error);
   }
 };
