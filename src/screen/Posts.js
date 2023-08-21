@@ -4,6 +4,7 @@ import {
   FlatList,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
@@ -15,19 +16,18 @@ const fetchAllPosts = async ({pageParam = 1}) => {
     const response = await axios.get(
       `https://jsonplaceholder.typicode.com/posts?_page=${pageParam}&_limit=10`,
     );
-    return response;
+    return response.data;
   } catch (error) {
-    console.error(error);
+    return Promise.reject(new Error(error.message || error));
   }
 };
 
-const Screen1 = () => {
-  // const [page, setPage] = React.useState(1);
+const Posts = ({navigation}) => {
   const {
+    isLoading,
     isError,
     error,
     data: posts,
-    isLoading,
     isFetching,
     fetchNextPage,
     isFetchingNextPage,
@@ -37,32 +37,35 @@ const Screen1 = () => {
     getNextPageParam: (_lastPage, pages) => {
       return pages.length + 1;
     },
+    staleTime: 60 * 1000,
   });
 
   if (isLoading) {
     return <Text>Loading...</Text>;
   }
-  console.log(posts.pages[0].status);
 
   if (isError) {
-    <Text>{error}</Text>;
+    return <Text>{error.message}</Text>;
   }
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <FlatList
-        contentContainerStyle={{padding: 10}}
+        contentContainerStyle={{paddingHorizontal: 10}}
         ItemSeparatorComponent={<View style={{height: 10}} />}
-        data={posts.pages.map(page => page.data).flat()}
+        data={posts.pages.flat()}
         keyExtractor={item => item.id}
         onEndReachedThreshold={0.5}
         onEndReached={() => {
           fetchNextPage();
         }}
         renderItem={({item}) => (
-          <View>
-            <Text style={{color: 'black', fontSize: 20}}>{item.title}</Text>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Post Detail', {postId: item.id})
+            }>
+            <Text style={{color: 'black', fontSize: 16}}>{item.title}</Text>
             <Text>{item.body}</Text>
-          </View>
+          </TouchableOpacity>
         )}
         ListFooterComponent={
           isFetching && isFetchingNextPage && <ActivityIndicator size="small" />
@@ -72,6 +75,6 @@ const Screen1 = () => {
   );
 };
 
-export default Screen1;
+export default Posts;
 
 const styles = StyleSheet.create({});
