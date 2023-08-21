@@ -11,19 +11,10 @@ import {useInfiniteQuery} from '@tanstack/react-query';
 import axios from 'axios';
 
 const fetchAllPosts = async ({pageParam = 1}) => {
-  // const res = axios.get(
-  //   `https://jsonplaceholder.typicode.com/posts?_page=${pageParam}&_limit=10`,
-  // );
-  // res.catch(_err => {
-  //   return Promise.reject(new Error('Oh no!'));
-  // });
-  // return res;
-
   try {
     const response = await axios.get(
       `https://jsonplaceholder.typicode.com/posts?_page=${pageParam}&_limit=10`,
     );
-    console.log(response);
     return response;
   } catch (error) {
     console.error(error);
