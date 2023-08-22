@@ -7,14 +7,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import axios from 'axios';
 
 const getAllUsers = async () => {
   try {
     const response = await axios.get(
-      'https://jsonplaceholder.typicode.com/users',
+      'https://64e38bc4bac46e480e78efbf.mockapi.io/users',
     );
 
     return response.data;
@@ -24,6 +24,25 @@ const getAllUsers = async () => {
 };
 
 const Users = ({navigation}) => {
+  //nut them moi
+  const headerRight = useCallback(
+    () => (
+      <TouchableOpacity
+        style={{marginRight: 20}}
+        onPress={() => navigation.navigate('New User')}>
+        <Text style={{color: 'red'}}>Add</Text>
+      </TouchableOpacity>
+    ),
+    [navigation],
+  );
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: headerRight,
+    });
+  }, [headerRight, navigation]);
+  //ket thuc nut them moi
+
+  //lay danh sach nguoi dung
   const {data, isFetching, isError, error, isLoading} = useQuery({
     queryKey: ['users'],
     queryFn: getAllUsers,

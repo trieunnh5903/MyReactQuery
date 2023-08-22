@@ -17,7 +17,7 @@ import axios from 'axios';
 const fetchUserById = async userId => {
   try {
     const response = await axios.get(
-      `https://jsonplaceholder.typicode.com/users/${userId}`,
+      `https://64e38bc4bac46e480e78efbf.mockapi.io/users/${userId}`,
     );
     return response.data;
   } catch (error) {
@@ -56,11 +56,9 @@ const UserDetail = ({route, navigation}) => {
       <View style={{padding: 10}}>
         <Text style={{color: 'black', fontSize: 20}}>User Information</Text>
         <Text>Name: {user?.name}</Text>
+        <Text>Username: {user?.username}</Text>
         <Text>Email: {user?.email}</Text>
-        <Text>
-          Address: {user?.address?.street}, {user?.address?.suite},
-          {user?.address?.city}
-        </Text>
+        <Text>Address: {user?.address}</Text>
         <Text>Phone: {user?.phone}</Text>
       </View>
     </View>
